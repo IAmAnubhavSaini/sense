@@ -1,11 +1,11 @@
 import { isBrowser, isNode } from "./checks.js";
 
-function generateUUID(): string {
+async function generateUUID(): Promise<string> {
     if (isBrowser()) {
         return crypto.randomUUID();
     }
     if (isNode()) {
-        const { randomUUID } = require("node:crypto");
+        const { randomUUID } = await import("node:crypto");
         return randomUUID();
     }
     throw new Error("Only Browser and Node is supported as of now.");
