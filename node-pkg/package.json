@@ -1,6 +1,6 @@
 {
   "name": "@f0c1s/sense",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "MIT",
   "main": "dist/sense.js",
   "devDependencies": {

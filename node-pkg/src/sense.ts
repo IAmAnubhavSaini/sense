@@ -9,14 +9,14 @@ type SenseEventDetail = {
 };
 
 class Sense {
-    static #handlers: Record<string, SenseHandler> = {};
-    static #listeners: Record<string, (e: CustomEvent<SenseEventDetail>) => void> = {};
-    static #cache: Map<string, any> = new Map();
-    static #timeout = 5000;
+    protected static handlers: Record<string, SenseHandler> = {};
+    protected static listeners: Record<string, (e: CustomEvent<SenseEventDetail>) => void> = {};
+    protected static cache: Map<string, any> = new Map();
+    protected static timeout = 5000;
 
     static define<TInput = any, TOutput = any>(name: string, fn: SenseHandler<TInput, TOutput>) {
-        this.#handlers[name] = fn;
-        this.#listen(name);
+        this.handlers[name] = fn;
+        this.listen(name);
     }
 
     static async call<TInput = any, TOutput = any>(
@@ -35,11 +35,11 @@ class Sense {
                 throw new Error("Cannot generate randomUUID");
             }
         }
-        const timeout = options.timeout ?? this.#timeout;
+        const timeout = options.timeout ?? this.timeout;
         const cacheKey = `${name}:${JSON.stringify(input)}`;
 
-        if (this.#cache.has(cacheKey)) {
-            return this.#cache.get(cacheKey);
+        if (this.cache.has(cacheKey)) {
+            return this.cache.get(cacheKey);
         }
 
         return new Promise<TOutput>((resolve, reject) => {
@@ -53,7 +53,7 @@ class Sense {
                     if (customEvent.detail.error) {
                         reject(customEvent.detail.error);
                     } else {
-                        this.#cache.set(cacheKey, customEvent.detail.output);
+                        this.cache.set(cacheKey, customEvent.detail.output);
                         resolve(customEvent.detail.output as TOutput);
                     }
                 }
@@ -65,7 +65,7 @@ class Sense {
             }, timeout);
 
             window.addEventListener(doneEvent, handler);
-            this.#dispatch(`need_${name}`, { input, key });
+            this.dispatch(`need_${name}`, { input, key });
         });
     }
 
@@ -78,38 +78,38 @@ class Sense {
         }
     }
 
-    static #dispatch(event: string, payload: SenseEventDetail) {
+    protected static dispatch(event: string, payload: SenseEventDetail) {
         window.dispatchEvent(new CustomEvent<SenseEventDetail>(event, { detail: payload }));
     }
 
-    static async #trigger(event: string, data: SenseEventDetail) {
+    protected static async trigger(event: string, data: SenseEventDetail) {
         const name = event.replace(/^need_/, "");
-        const fn = this.#handlers[name];
+        const fn = this.handlers[name];
         if (!fn) return;
 
         try {
             const output = await fn(data.input);
-            this.#dispatch(`done_${name}`, { ...data, output });
+            this.dispatch(`done_${name}`, { ...data, output });
         } catch (err) {
-            this.#dispatch(`done_${name}`, { ...data, output: null, error: err });
+            this.dispatch(`done_${name}`, { ...data, output: null, error: err });
         }
     }
 
-    static #listen(name: string) {
+    protected static listen(name: string) {
         const event = `need_${name}`;
-        if (this.#listeners[name]) return;
+        if (this.listeners[name]) return;
 
         const handler = (e: Event) => {
             const customEvent = e as CustomEvent<SenseEventDetail>;
-            this.#trigger(event, customEvent.detail);
+            this.trigger(event, customEvent.detail);
         };
 
         window.addEventListener(event, handler);
-        this.#listeners[name] = handler;
+        this.listeners[name] = handler;
     }
 
     static setTimeoutDuration(timeout: number) {
-        this.#timeout = timeout;
+        this.timeout = timeout;
     }
 }
 

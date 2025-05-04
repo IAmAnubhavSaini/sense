@@ -2,18 +2,18 @@ import { EventEmitter } from "events";
 import { Sense } from "./sense.js";
 
 class NodeSense extends Sense {
-    #emitter = new EventEmitter();
+    protected emitter = new EventEmitter();
 
     protected dispatch(event: string, payload: any) {
-        this.#emitter.emit(event, payload);
+        this.emitter.emit(event, payload);
     }
 
     protected listen(event: string, handler: (payload: any) => void) {
-        this.#emitter.on(event, handler);
+        this.emitter.on(event, handler);
     }
 
     protected unlisten(event: string, handler: any) {
-        this.#emitter.off(event, handler);
+        this.emitter.off(event, handler);
     }
 }
 
