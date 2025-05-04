@@ -1,6 +1,6 @@
 {
   "name": "@f0c1s/sense",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "MIT",
   "main": "dist/sense.js",
   "devDependencies": {
@@ -27,6 +27,13 @@
     "dist"
   ],
   "exports": {
-    ".": "./dist/sense.js"
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./platform": {
+      "browser": "./dist/sense.browser.js",
+      "node": "./dist/sense.node.js"
+    }
   }
 }
