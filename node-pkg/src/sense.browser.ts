@@ -54,4 +54,4 @@ class Sense {
     }
 }
 
-export { Sense };
+export default Sense;
