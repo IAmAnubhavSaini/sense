@@ -1,6 +1,6 @@
 {
   "name": "@f0c1s/sense",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "MIT",
   "devDependencies": {
     "@types/node": "^22.15.3",

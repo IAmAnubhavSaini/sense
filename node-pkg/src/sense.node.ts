@@ -21,7 +21,7 @@ class Sense {
             Sense.unlisten(`need_${name}`, Sense.listeners[name]);
         }
         Sense.handlers[name] = fn;
-        Sense.listen(name, fn);
+        Sense.listen(`need_${name}`, fn);
     }
 
     static async call<TInput = any, TOutput = any>(
@@ -96,7 +96,12 @@ class Sense {
     }
 
     protected static listen(event: string, handler: (payload: any) => void) {
-        Sense.emitter.on(event, handler);
+        if (this.listeners[event]) {
+            this.unlisten(event, this.listeners[event]);
+        }
+
+        this.listeners[event] = handler;
+        this.emitter.on(event, handler);
     }
 
     protected static unlisten(event: string, handler: any) {
