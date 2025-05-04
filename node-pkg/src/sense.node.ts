@@ -50,7 +50,7 @@ class Sense {
                 const customEvent = e as CustomEvent<SenseEventDetail>;
                 if (customEvent.detail?.key === key) {
                     clearTimeout(timeoutId);
-                    window.removeEventListener(doneEvent, handler);
+                    this.unlisten(doneEvent, handler);
                     if (customEvent.detail.error) {
                         reject(customEvent.detail.error);
                     } else {
@@ -61,11 +61,10 @@ class Sense {
             };
 
             const timeoutId = setTimeout(() => {
-                window.removeEventListener(doneEvent, handler);
+                this.unlisten(doneEvent, handler);
                 reject(new Error(`Timeout: ${name} operation took too long.`));
             }, timeout);
-
-            window.addEventListener(doneEvent, handler);
+            this.listen(doneEvent, handler);
             this.dispatch(`need_${name}`, { input, key });
         });
     }
