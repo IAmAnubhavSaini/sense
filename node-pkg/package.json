@@ -1,6 +1,6 @@
 {
   "name": "@f0c1s/sense",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "MIT",
   "devDependencies": {
     "@types/node": "^22.15.3",
@@ -23,10 +23,8 @@
   },
   "homepage": "https://github.com/IAmAnubhavSaini/sense#readme",
   "exports": {
-    ".": {
-      "browser": "./dist/sense.browser.js",
-      "default": "./dist/sense.js",
-      "node": "./dist/sense.node.js"
-    }
+    "./browser": "./dist/sense.browser.js",
+    "./default": "./dist/sense.js",
+    "./node": "./dist/sense.node.js"
   }
 }
