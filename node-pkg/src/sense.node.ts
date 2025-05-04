@@ -17,11 +17,11 @@ class Sense {
     protected static timeout = 5000;
 
     static define<TInput = any, TOutput = any>(name: string, fn: SenseHandler<TInput, TOutput>) {
-        if (this.listeners[name]) {
-            this.unlisten(`need_${name}`, this.listeners[name]);
+        if (Sense.listeners[name]) {
+            Sense.unlisten(`need_${name}`, Sense.listeners[name]);
         }
-        this.handlers[name] = fn;
-        this.listen(name, fn);
+        Sense.handlers[name] = fn;
+        Sense.listen(name, fn);
     }
 
     static async call<TInput = any, TOutput = any>(
@@ -36,11 +36,11 @@ class Sense {
             console.error(e);
             throw e;
         }
-        const timeout = options.timeout ?? this.timeout;
+        const timeout = options.timeout ?? Sense.timeout;
         const cacheKey = `${name}:${JSON.stringify(input)}`;
 
-        if (this.cache.has(cacheKey)) {
-            return this.cache.get(cacheKey);
+        if (Sense.cache.has(cacheKey)) {
+            return Sense.cache.get(cacheKey);
         }
 
         return new Promise<TOutput>((resolve, reject) => {
@@ -50,22 +50,22 @@ class Sense {
                 const customEvent = e as CustomEvent<SenseEventDetail>;
                 if (customEvent.detail?.key === key) {
                     clearTimeout(timeoutId);
-                    this.unlisten(doneEvent, handler);
+                    Sense.unlisten(doneEvent, handler);
                     if (customEvent.detail.error) {
                         reject(customEvent.detail.error);
                     } else {
-                        this.cache.set(cacheKey, customEvent.detail.output);
+                        Sense.cache.set(cacheKey, customEvent.detail.output);
                         resolve(customEvent.detail.output as TOutput);
                     }
                 }
             };
 
             const timeoutId = setTimeout(() => {
-                this.unlisten(doneEvent, handler);
+                Sense.unlisten(doneEvent, handler);
                 reject(new Error(`Timeout: ${name} operation took too long.`));
             }, timeout);
-            this.listen(doneEvent, handler);
-            this.dispatch(`need_${name}`, { input, key });
+            Sense.listen(doneEvent, handler);
+            Sense.dispatch(`need_${name}`, { input, key });
         });
     }
 
@@ -79,32 +79,32 @@ class Sense {
     }
 
     protected static dispatch(event: string, payload: any) {
-        this.emitter.emit(event, payload);
+        Sense.emitter.emit(event, payload);
     }
 
     protected static async trigger(event: string, data: SenseEventDetail) {
         const name = event.replace(/^need_/, "");
-        const fn = this.handlers[name];
+        const fn = Sense.handlers[name];
         if (!fn) return;
 
         try {
             const output = await fn(data.input);
-            this.dispatch(`done_${name}`, { ...data, output });
+            Sense.dispatch(`done_${name}`, { ...data, output });
         } catch (err) {
-            this.dispatch(`done_${name}`, { ...data, output: null, error: err });
+            Sense.dispatch(`done_${name}`, { ...data, output: null, error: err });
         }
     }
 
     protected static listen(event: string, handler: (payload: any) => void) {
-        this.emitter.on(event, handler);
+        Sense.emitter.on(event, handler);
     }
 
     protected static unlisten(event: string, handler: any) {
-        this.emitter.off(event, handler);
+        Sense.emitter.off(event, handler);
     }
 
     static setTimeoutDuration(timeout: number) {
-        this.timeout = timeout;
+        Sense.timeout = timeout;
     }
 }
 
