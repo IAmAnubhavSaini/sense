@@ -1,14 +1,16 @@
 {
   "name": "@f0c1s/sense",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "MIT",
   "devDependencies": {
     "@types/node": "^22.15.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite": "^6.3.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/tsc --project tsconfig.json"
+    "clean": "rm -rf dist",
+    "build": "npm run clean && vite build"
   },
   "repository": {
     "type": "git",
@@ -23,9 +25,17 @@
   },
   "homepage": "https://github.com/IAmAnubhavSaini/sense#readme",
   "exports": {
-    "./browser": "./dist/sense.browser.js",
-    "./default": "./dist/index.js",
-    "./node": "./dist/sense.node.js"
+    "./node": {
+      "require": "./dist/sense.node.cjs.js",
+      "import": "./dist/sense.node.esm.js"
+    },
+    "./browser": {
+      "import": "./dist/sense.browser.esm.js"
+    },
+    ".": {
+      "require": "./dist/sense.node.cjs.js",
+      "import": "./dist/sense.node.esm.js"
+    }
   },
   "files": [
     "dist"
