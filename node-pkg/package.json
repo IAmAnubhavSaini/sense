@@ -1,8 +1,7 @@
 {
   "name": "@f0c1s/sense",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "MIT",
-  "main": "dist/sense.js",
   "devDependencies": {
     "@types/node": "^22.15.3",
     "typescript": "^5.8.3"
@@ -28,11 +27,8 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./platform": {
       "browser": "./dist/sense.browser.js",
+      "default": "./dist/sense.js",
       "node": "./dist/sense.node.js"
     }
   }
