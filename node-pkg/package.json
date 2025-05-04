@@ -1,6 +1,6 @@
 {
   "name": "@f0c1s/sense",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "MIT",
   "devDependencies": {
     "@types/node": "^22.15.3",
@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
-    "build": "npm run clean && ./node_modules/.bin/tsc --project tsconfig.json"
+    "build": "./node_modules/.bin/tsc --project tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -25,5 +25,10 @@
   "homepage": "https://github.com/IAmAnubhavSaini/sense#readme",
   "files": [
     "dist"
-  ]
+  ],
+  "exports": {
+    ".": "./dist/sense.node.js",
+    "./browser": "./dist/sense.browser.js",
+    "./node": "./dist/sense.node.js"
+  }
 }
