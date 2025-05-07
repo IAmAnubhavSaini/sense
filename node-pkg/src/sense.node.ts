@@ -13,7 +13,7 @@ class Sense {
     protected static emitter = new EventEmitter();
     protected static handlers: Record<string, SenseHandler> = {};
 
-    static define<TInput = any, TOutput = any>(name: string, fn: SenseHandler<TInput, TOutput>) {
+    static on<TInput = any, TOutput = any>(name: string, fn: SenseHandler<TInput, TOutput>) {
         this.handlers[name] = fn;
         this.emitter.on(`need_${name}`, async (detail: SenseEventDetail) => {
             const handler = this.handlers[name];
@@ -27,7 +27,7 @@ class Sense {
         });
     }
 
-    static async call<TInput = any, TOutput = any>(name: string, input: TInput): Promise<TOutput> {
+    static async need<TInput = any, TOutput = any>(name: string, input: TInput): Promise<TOutput> {
         const key = randomUUID();
 
         return new Promise<TOutput>((resolve, reject) => {
@@ -46,7 +46,7 @@ class Sense {
         });
     }
 
-    static async workflow<T>(fn: () => Promise<T>): Promise<T> {
+    static async flow<T>(fn: () => Promise<T>): Promise<T> {
         try {
             return await fn();
         } catch (err) {
