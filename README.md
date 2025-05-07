@@ -1,8 +1,9 @@
 # Sense
 
-- [Node Package @f0c1s/sense README](/node-pkg/README.md)
+-   [Node Package @f0c1s/sense README](/node-pkg/README.md)
 
-[For working example see this file](https://github.com/IAmAnubhavSaini/test-node-packages/blob/main/src/sensed.js)
+-   [For working example see this file](https://github.com/IAmAnubhavSaini/test-node-packages/blob/main/src/sensed.js)
+-   [Examples](./examples/http-server.README.md)
 
 ## License
 

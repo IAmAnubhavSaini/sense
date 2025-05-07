@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "@f0c1s/sense-examples",
+  "version": "0.0.1",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf dist",
+    "build": "./node_modules/.bin/tsc --project tsconfig.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^22.15.15",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@f0c1s/sense": "^0.0.16"
+  }
+}
