@@ -18,6 +18,6 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@f0c1s/sense": "^0.0.16"
+    "@f0c1s/sense": "^0.0.17"
   }
 }
